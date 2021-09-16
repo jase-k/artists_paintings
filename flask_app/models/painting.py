@@ -10,6 +10,7 @@ class Painting:
         self.title = data['title']
         self.description = data['description']
         self.price = data['price']
+        self.quantity = data['quantity']
         self.artist_id = data['artist_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
@@ -20,7 +21,7 @@ class Painting:
 
         is_valid = cls.validatePainting(data)
         if is_valid:
-            query = "INSERT INTO paintings (title, description, price, artist_id, created_at, updated_at) Values(%(title)s, %(description)s, %(price)s, %(artist_id)s, NOW(), NOW())"
+            query = "INSERT INTO paintings (title, description, price, artist_id, created_at, updated_at, quantity) Values(%(title)s, %(description)s, %(price)s, %(artist_id)s, NOW(), NOW(), %(quantity)s)"
 
             id = MySQLConnection(db).query_db(query, data)
 
@@ -62,10 +63,28 @@ class Painting:
         query = "SELECT * from paintings LEFT JOIN artists ON artist_id = artists.id"
 
         paintings_fromDB = MySQLConnection(db).query_db(query)
-        print("DATA from SELECT ALL paintings: ", paintings_fromDB)
+
         paintings =[]
 
         for painting in paintings_fromDB:
             paintings.append(cls(painting))
         
         return paintings
+
+#Returns a painting instance from DB 
+    @classmethod
+    def getPaintingById(cls, id):
+        query = f'SELECT * from paintings LEFT JOIN artists ON artist_id = artists.id WHERE paintings.id = {id}'
+
+        DBdata = MySQLConnection(db).query_db(query)
+        print("Painting Returned from DB: ", DBdata)
+        if DBdata:
+            return cls(DBdata[0])
+        else:
+            return False
+
+    @staticmethod
+    def updatePainting(data):
+        query = "UPDATE paintings SET title = %(title)s, description = %(description)s, price = %(price)s, quantity = %(quantity)s, updated_at = NOW() WHERE id = %(id)s"
+
+        MySQLConnection(db).query_db(query, data)

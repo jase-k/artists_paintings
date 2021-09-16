@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Paintings!</title>
+</head>
+<body>
+    {{session}}
+    {% with messages = get_flashed_messages(True) %}
+    <div class="container">
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link" href="/artists/{{session['artist_id']}}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+        <h1>Add a Painting</h1>
+        <form action="/paintings/edit" method="POST">
+            <input type="hidden" value="{{painting.id}}" name = "id">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" placeholder="Creative Title Here" name = 'title' 
+                
+                value="{{painting.title}}"
+                
+                >
+            </div>
+            {% for category, message in messages %}
+                    {% if category == 'title' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" rows="3" name = 'description'>{{painting.description}}</textarea>
+            </div>
+            {% for category, message in messages %}
+                    {% if category == 'description' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" class="form-control" id="price" placeholder="00.00" name = 'price' value="{{painting.price}}">
+            </div>
+            {% for category, message in messages %}
+                    {% if category == 'price' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity: </label>
+                <input type="number" class="form-control" id="quantity" placeholder="00" name = 'quantity' value="{{painting.quantity}}">
+            </div>
+            {% for category, message in messages %}
+                    {% if category == 'quantity' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary mb-3">Submit!</button>
+            </div>
+        </form>
+    </div>
+    {% endwith %}
+    
+</body>
+</html>

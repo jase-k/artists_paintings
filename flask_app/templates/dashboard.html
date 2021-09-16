@@ -33,8 +33,8 @@
             <td>{{painting.artist}}</td>
             <td>
                 {% if painting.artist_id == session.artist_id %}
-                    <a href="/edit">edit</a>
-                    <a href="/delete">delete</a>
+                    <a href="/paintings/{{painting.id}}/edit">edit</a>
+                    <a href="/paintings/{{painting.id}}/delete">delete</a>
                 {% endif %}
                 {% if not painting.artist_id == session.artist_id %}
                     <a href="">NONE</a>
