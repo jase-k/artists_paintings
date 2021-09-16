@@ -9,6 +9,7 @@
 </head>
 <body>
     {% with messages = get_flashed_messages(True) %}
+    <h2>Register: </h2>
     <form class="container" action="/register" method="POST">
         <div class="mb-3">
             <label for="first_name" class="form-label">First Name:</label>
@@ -57,6 +58,27 @@
         <div class="mb-3">
             <label for="password2" class="form-label">Confirm Password:</label>
             <input type="password" class="form-control" id="password2" name="password2">
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary mb-3">Register!</button>
+        </div>
+    </form>
+    <h2>Login: </h2>
+    <form action="/login" method="POST" class="container">
+        <div class="mb-3">
+            <label for="email_login" class="form-label">Email:</label>
+            <input type="text" class="form-control" id="email_login" placeholder="something@provider.com" name = "email" value="{{session['email_login']}}">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" value="">
+            {% for category, message in messages %}
+                    {% if category == 'login' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
         </div>
         <div class="mb-3">
             <button type="submit" class="btn btn-primary mb-3">Register!</button>

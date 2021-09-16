@@ -20,7 +20,7 @@ def registerArtist():
     session['first_name'] = data['first_name']
     session['last_name'] = data['last_name']
     session['email'] = data['email']
-    
+
     if Artist.validateRegistration(data):
         id = Artist.registerArtist(data)
         return redirect(f'/artists/{id}') 
@@ -28,5 +28,21 @@ def registerArtist():
         return redirect('/')
 
 @app.route('/artists/<int:id>')
-def displayDashboard():
+def displayDashboard(id):
     pass
+
+@app.route('/login', methods=['POST'])
+def loginArtist():
+    #Validate login than redirect to '/artsits/<int:id>
+    data = {
+        'email' : request.form['email'],
+        'password' : request.form['password'] 
+    }
+
+    print("Data passed for Validation: ", data)
+    id = Artist.validateLogin(data)
+    if id:
+        return redirect(f'/artists/{id}')
+    else:
+        return redirect('/')
+

@@ -1,3 +1,4 @@
+from flask.globals import session
 from flask_app.config.mysqlconnection import MySQLConnection
 from flask import flash
 import bcrypt
@@ -26,12 +27,53 @@ class Artist():
         print("New artist created with the id : ", id)
 
         return id
+
+#Gets artist from database if finds a matching email. If no matching email found return False
+    @classmethod
+    def getArtistByEmail(cls, email):
+        query = f"SELECT * from artists WHERE email = '{email}'"
+
+        artist_fromDB = MySQLConnection(db).query_db(query)
+
+        #if is a success, puts the user in an instance instead of list
+        if artist_fromDB:
+            artist = cls(artist_fromDB[0])
+            session['email_login'] = artist.email
+            return artist
+        else:
+            flash("Email not recognized..", 'login')
+            return False
     
+    @classmethod
+    def validateLogin(cls, data):
+        print("Data Recieved from Login: ", data)
+        artist = cls.getArtistByEmail(data['email'])
+
+        if artist:
+            password = cls.checkMatchPW(data['password'], artist.password)
+            if password:
+                session['artist_id'] = artist.id
+                return artist.id
+        return False
+
+
     @staticmethod
     def hashPW(password):
         hashed = bcrypt.hashpw(bytes(password, "utf8"), bcrypt.gensalt(14))
         print(f'Password: {password}, hashed into: {hashed}')
         return hashed
+
+    @staticmethod
+    def checkMatchPW(password, hashed_pw):
+
+        pw_check = bcrypt.checkpw(bytes(password, "utf8"), bytes(hashed_pw, 'utf8'))
+        print("hashed pw check: ", pw_check )
+
+        if not pw_check:
+            flash('Incorrect Password', 'login')
+        
+        return pw_check 
+
 
     @staticmethod
     def validateRegistration(data):
