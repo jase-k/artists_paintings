@@ -1,6 +1,8 @@
+from flask_app.models.painting import Painting
 from flask_app import app
 from flask import redirect, render_template, request, session
 from flask_app.models.artist import Artist
+from flask_app.models.painting import Painting
 
 @app.route('/')
 def mainPage():
@@ -31,7 +33,8 @@ def registerArtist():
 def displayDashboard(id):
     if session['artist_id'] == id:
         artist = Artist.getArtistById(id)
-        return render_template('dashboard.html', artist = artist)
+        paintings = Painting.getAllPaintings()
+        return render_template('dashboard.html', artist = artist, paintings = paintings)
     else:
         return redirect(f"/artists/{session['artist_id']}")
 

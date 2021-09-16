@@ -17,5 +17,32 @@
             <a class="nav-link" href="/logout">Logout</a>
         </li>
     </ul>
+    <h2>Paintings</h2>
+    <table class="table" id='AllPaintings'>
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Artist</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for painting in paintings %}
+          <tr>
+            <td>{{painting.title}}</td>
+            <td>{{painting.artist}}</td>
+            <td>
+                {% if painting.artist_id == session.artist_id %}
+                    <a href="/edit">edit</a>
+                    <a href="/delete">delete</a>
+                {% endif %}
+                {% if not painting.artist_id == session.artist_id %}
+                    <a href="">NONE</a>
+                {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
 </body>
 </html>

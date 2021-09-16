@@ -13,6 +13,7 @@ class Painting:
         self.artist_id = data['artist_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.artist = f"{data['first_name']} {data['last_name']}" 
 
     @classmethod
     def addPainting(cls, data):
@@ -55,3 +56,16 @@ class Painting:
             is_valid = False
 
         return is_valid
+    #gets all paintings from db and returns and list of instances
+    @classmethod
+    def getAllPaintings(cls):
+        query = "SELECT * from paintings LEFT JOIN artists ON artist_id = artists.id"
+
+        paintings_fromDB = MySQLConnection(db).query_db(query)
+        print("DATA from SELECT ALL paintings: ", paintings_fromDB)
+        paintings =[]
+
+        for painting in paintings_fromDB:
+            paintings.append(cls(painting))
+        
+        return paintings
