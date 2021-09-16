@@ -15,6 +15,10 @@ class Painting:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.artist = f"{data['first_name']} {data['last_name']}" 
+    
+    def delete(self):
+        query = f"DELETE from paintings WHERE id = {self.id}"
+        MySQLConnection(db).query_db(query)
 
     @classmethod
     def addPainting(cls, data):

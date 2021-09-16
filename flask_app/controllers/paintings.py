@@ -57,4 +57,8 @@ def updatePainting():
 
 @app.route('/paintings/<int:id>/delete')
 def deletePainting(id):
-    pass
+    painting = Painting.getPaintingById(id)
+    if painting.artist_id == session['artist_id']:
+        painting.delete()
+
+    return redirect(f'/artists/{session["artist_id"]}')
