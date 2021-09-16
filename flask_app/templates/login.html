@@ -8,22 +8,51 @@
     <title>Login - Paintings</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages(True) %}
     <form class="container" action="/register" method="POST">
         <div class="mb-3">
             <label for="first_name" class="form-label">First Name:</label>
             <input type="text" class="form-control" id="first_name" placeholder="First Name" name ="first_name" value="{{session['first_name']}}">
+            {% for category, message in messages %}
+                    {% if category == 'first_name' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
         </div>
         <div class="mb-3">
             <label for="last_name" class="form-label">Last Name:</label>
             <input type="text" class="form-control" id="last_name" placeholder="Last Name" name= "last_name" value="{{session['last_name']}}">
+            {% for category, message in messages %}
+                    {% if category == 'last_name' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <input type="text" class="form-control" id="email" placeholder="something@provider.com" name = "email" value="{{session['email']}}">
+            {% for category, message in messages %}
+                    {% if category == 'email' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
         </div>
         <div class="mb-3">
             <label for="password1" class="form-label">Password:</label>
             <input type="password" class="form-control" id="password1" name="password1">
+            {% for category, message in messages %}
+                    {% if category == 'password' %}
+                        <p class='flashes'>
+                            {{message}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
         </div>
         <div class="mb-3">
             <label for="password2" class="form-label">Confirm Password:</label>
@@ -33,5 +62,6 @@
             <button type="submit" class="btn btn-primary mb-3">Register!</button>
         </div>
     </form>
+    {% endwith %}
 </body>
 </html>

@@ -55,7 +55,9 @@ class Artist():
         if(len(data['password']) > 25):
             flash("Password must be shorter than 26 characters", 'password')
             is_valid = False
-            
+        if(data['password'] != data['confirm_password']):
+            flash("Passwords do not match!", 'password')
+            is_valid = False
         numberandchar = re.compile(r'^.*[0-9].*')
         if(not numberandchar.match(data['confirm_password'])):
             flash("Password must contain at least 1 number", 'password')
