@@ -4,7 +4,10 @@ from flask_app.models.painting import Painting
 
 @app.route('/paintings/add')
 def addPaintingPage():
-    return render_template('add_painting.html')
+    if 'artist_id' in session:
+        return render_template('add_painting.html')
+    else:
+        return redirect('/')
 
 @app.route('/paintings/add/new', methods = ["POST"])
 def addPainting():
@@ -34,8 +37,12 @@ def addPainting():
 
 @app.route('/paintings/<int:id>/edit')
 def editPaintingPage(id):
-    painting = Painting.getPaintingById(id)
-    return render_template('edit_painting.html', painting = painting)
+    if 'artist_id' in session:
+        painting = Painting.getPaintingById(id)
+        return render_template('edit_painting.html', painting = painting)
+    else:
+        return redirect('/')
+
 
 @app.route('/paintings/edit', methods = ["POST"])
 def updatePainting():
@@ -53,7 +60,13 @@ def updatePainting():
 
     return redirect(f'/artists/{data["artist_id"]}')
 
-
+@app.route('/paintings/<int:id>')
+def displayPainting(id):
+    if 'artist_id' in session:
+        painting = Painting.getPaintingById(id)
+        return render_template('view_painting.html', painting = painting)
+    else:
+        return redirect('/')
 
 @app.route('/paintings/<int:id>/delete')
 def deletePainting(id):
@@ -62,3 +75,14 @@ def deletePainting(id):
         painting.delete()
 
     return redirect(f'/artists/{session["artist_id"]}')
+
+@app.route('/paintings/<int:id>/buy', methods=["POST"])
+def purchasePainting(id):
+    painting = Painting.getPaintingById(id)
+    data ={
+        'artist_id': painting.artist_id,
+        'painting_id': id
+    }
+
+    Painting.buyPainting(data)
+    return redirect(f'/paintings/{id}')

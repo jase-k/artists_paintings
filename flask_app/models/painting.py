@@ -15,10 +15,17 @@ class Painting:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.artist = f"{data['first_name']} {data['last_name']}" 
+        if 'number_purchased' in data: 
+            self.number_purchased = data['number_purchased']
     
     def delete(self):
         query = f"DELETE from paintings WHERE id = {self.id}"
         MySQLConnection(db).query_db(query)
+    
+    staticmethod
+    def buyPainting(data):
+        query = "INSERT INTO purchases (artist_id, painting_id, created_at, updated_at) Values( %(artist_id)s, %(painting_id)s, NOW(), NOW())"
+        MySQLConnection(db).query_db(query, data)
 
     @classmethod
     def addPainting(cls, data):
@@ -78,7 +85,7 @@ class Painting:
 #Returns a painting instance from DB 
     @classmethod
     def getPaintingById(cls, id):
-        query = f'SELECT * from paintings LEFT JOIN artists ON artist_id = artists.id WHERE paintings.id = {id}'
+        query = f'SELECT *, count(purchases.id) as number_purchased from paintings LEFT JOIN artists ON artist_id = artists.id LEFT JOIN purchases ON paintings.id = purchases.painting_id WHERE paintings.id = {id}'
 
         DBdata = MySQLConnection(db).query_db(query)
         print("Painting Returned from DB: ", DBdata)

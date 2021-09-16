@@ -29,7 +29,7 @@
         <tbody>
         {% for painting in paintings %}
           <tr>
-            <td>{{painting.title}}</td>
+            <td><a href="/paintings/{{painting.id}}">{{painting.title}}</a></td>
             <td>{{painting.artist}}</td>
             <td>
                 {% if painting.artist_id == session.artist_id %}

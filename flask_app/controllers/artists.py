@@ -31,12 +31,15 @@ def registerArtist():
 
 @app.route('/artists/<int:id>')
 def displayDashboard(id):
-    if session['artist_id'] == id:
-        artist = Artist.getArtistById(id)
-        paintings = Painting.getAllPaintings()
-        return render_template('dashboard.html', artist = artist, paintings = paintings)
+    if 'artist_id' in session:
+        if session['artist_id'] == id:
+            artist = Artist.getArtistById(id)
+            paintings = Painting.getAllPaintings()
+            return render_template('dashboard.html', artist = artist, paintings = paintings)
+        else:
+            return redirect(f"/artists/{session['artist_id']}")
     else:
-        return redirect(f"/artists/{session['artist_id']}")
+        return redirect('/')
 
 @app.route('/login', methods=['POST'])
 def loginArtist():
