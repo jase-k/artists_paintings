@@ -29,7 +29,11 @@ def registerArtist():
 
 @app.route('/artists/<int:id>')
 def displayDashboard(id):
-    pass
+    if session['artist_id'] == id:
+        artist = Artist.getArtistById(id)
+        return render_template('dashboard.html', artist = artist)
+    else:
+        return redirect(f"/artists/{session['artist_id']}")
 
 @app.route('/login', methods=['POST'])
 def loginArtist():
@@ -45,4 +49,9 @@ def loginArtist():
         return redirect(f'/artists/{id}')
     else:
         return redirect('/')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 

@@ -25,7 +25,8 @@ class Artist():
 
         id = MySQLConnection(db).query_db(query, data)
         print("New artist created with the id : ", id)
-
+        session['artist_id'] = id
+        
         return id
 
 #Gets artist from database if finds a matching email. If no matching email found return False
@@ -56,6 +57,18 @@ class Artist():
                 return artist.id
         return False
 
+#Gets artist from database returns an Instance of Artist
+    @classmethod
+    def getArtistById(cls, id):
+        query = f"SELECT * FROM artists WHERE id = {id}"
+
+        artist_fromDB = MySQLConnection(db).query_db(query)
+
+        if artist_fromDB:
+            return cls(artist_fromDB[0])
+        else:
+            print("Could not find user from database!")
+            return False
 
     @staticmethod
     def hashPW(password):
